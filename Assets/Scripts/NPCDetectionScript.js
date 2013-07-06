@@ -13,9 +13,11 @@ function Update()
 	if (CanSeePlayer())
 	{
 		Debug.Log("See player");
+		navScript.SwitchNavState(NPCNavigationState.TrackPlayer);
 	}
 	else
 	{
+		navScript.SwitchNavState(NPCNavigationState.Walk);
 	}
 }
 
@@ -27,7 +29,7 @@ function CanSeePlayer() : boolean
  
     if(Physics.Raycast (transform.position, rayDirection, hit)){ // If the player is very close behind the enemy and not in view the enemy will detect the player
         if((hit.transform.tag == "Player") && (distanceToPlayer <= minPlayerDetectDistance)){
-            //Debug.Log("Caught player sneaking up behind!");
+            Debug.Log("Caught player sneaking up behind!");
             return true;
         }
     }
@@ -37,10 +39,10 @@ function CanSeePlayer() : boolean
         if (Physics.Raycast (transform.position, rayDirection, hit, rayRange)) {
  
             if (hit.transform.tag == "Player") {
-                //Debug.Log("Can see player");
+                Debug.Log("Can see player");
                 return true;
             }else{
-                //Debug.Log("Can not see player");
+                Debug.Log("Can not see player");
                 return false;
             }
         }

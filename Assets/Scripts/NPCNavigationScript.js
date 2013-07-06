@@ -7,7 +7,7 @@ enum NPCNavigationState
 	TrackPlayer
 };
 
-var navigationState:NPCNavigationState;
+var navigationState:NPCNavigationState=NPCNavigationState.Walk;
 var agent:NavMeshAgent;
 var waypoints:Transform[];
 var currentWaypoint=0;

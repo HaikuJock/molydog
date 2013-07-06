@@ -180,6 +180,10 @@ public class OVRPlayerController : OVRComponent
 		// sliding the rotation for a more natural movement and body visual
 		UpdatePlayerForwardDirTransform();
 	}
+	
+	public void Move(Vector3 direction) {
+		Controller.Move(direction);
+	}
 		
 	// UpdateMovement
 	//

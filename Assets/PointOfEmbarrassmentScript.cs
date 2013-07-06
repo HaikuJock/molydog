@@ -26,4 +26,13 @@ public class PointOfEmbarrassmentScript : MonoBehaviour {
 			UsedTimer -= Time.deltaTime;
 		}
 	}
+	
+	void OnTriggerEnter(Collider c)
+	{
+		if (c.tag=="Player")
+		{
+			DogScript dogScript=c.gameObject.GetComponent<DogScript>();
+			Use(dogScript);
+		}
+	}
 }

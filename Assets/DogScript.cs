@@ -8,6 +8,7 @@ public class DogScript : MonoBehaviour {
 	const float MinAttractionDistance = 20.0f;
 	const float UseageDistance = 3.0f;
 	static float AttractionSpeedFactor = 0.5f;
+	static float MaxEmbarrassment = 30.0f;
 	
 	// Use this for initialization
 	void Start () {
@@ -21,6 +22,8 @@ public class DogScript : MonoBehaviour {
 	
 	void UpdateAttractionToEmbarrassmentPoints() {
 		GameObject[] objects = GameObject.FindGameObjectsWithTag("PointOfEmbarrassment");
+		GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+		HUDScript hudScript = playerObject.GetComponent<HUDScript>();
 		Vector3 pt = PlayerController.transform.position;
 		
 		foreach (GameObject embarrasmentObject in objects) {
@@ -32,6 +35,7 @@ public class DogScript : MonoBehaviour {
 				AttractPlayerToEmbarrassmentPoint(embarrasmentObject);
 				if (distanceSquared < UseageDistance*UseageDistance) {
 					ptOfEmbarrassmentScript.Use(this);
+					hudScript.SetEmbarrassmentPortion(currentEmbarrassment / MaxEmbarrassment);
 				}
 			}
 		}

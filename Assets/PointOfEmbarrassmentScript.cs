@@ -6,6 +6,8 @@ public class PointOfEmbarrassmentScript : MonoBehaviour {
 	public float EmbarrassmentLevel = 0.0f;
 	public float ObservedEmbarrassmentFactor = 0.0f;
 	public float UsedTimer = 0.0f;
+	public bool SingleUse = false;
+	
 	static float ReUseTime = 20.0f;
 	
 	// Use this for initialization
@@ -20,7 +22,7 @@ public class PointOfEmbarrassmentScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (UsedTimer > 0.0f) {
+		if (UsedTimer > 0.0f && !SingleUse) {
 			UsedTimer -= Time.deltaTime;
 		}
 	}

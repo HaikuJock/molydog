@@ -85,7 +85,7 @@ public class DogScript : MonoBehaviour {
 		float embarrassmentPortion = currentEmbarrassment / MaxEmbarrassment;
 		
 		ptOfEmbarrassmentScript.Use(this);
-		hudScript.SetEmbarrassmentPortion(embarrassmentPortion);
+		hudScript.SetEmbarrassmentPortion(currentEmbarrassment / MaxEmbarrassment);
 		
 		if (embarrassmentPortion >= 1.0f) {
 			audio.PlayOneShot(OhYeahClip, Random.RandomRange(0.8f, 1.0f));

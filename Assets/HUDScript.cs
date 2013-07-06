@@ -269,7 +269,7 @@ public class HUDScript : MonoBehaviour {
 			if (detectedByParkKeeperCount > 0) {
 				GuiHelper.StereoDrawTexture(200, 4, 880, 660, ref ObservedStatusTexture, Color.red);
 			} else if (detectedByCivilianCount > 0) {
-				GuiHelper.StereoDrawTexture(100, 20, 1080, 400, ref ObservedStatusTexture, Color.green);
+				GuiHelper.StereoDrawTexture(200, 4, 880, 660, ref ObservedStatusTexture, Color.green);
 			}
 		}
 		

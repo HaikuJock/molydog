@@ -85,18 +85,24 @@ public class NPCNavigationScript : MonoBehaviour {
 		
 		if (newState==NPCNavigationState.TrackPlayer)
 		{
+			if (navigationState!=NPCNavigationState.TrackPlayer)
+			{
+				DogScript dogScript=player.GetComponent<DogScript>();
+				dogScript.currentObserverCount++;		
+			}
 			audio.Stop();
 			MoveToPlayer();
 			audio.PlayOneShot(angrySound);
-			DogScript dogScript=player.GetComponent<DogScript>();
-			dogScript.currentObserverCount--;		
 		}
 		else if (newState==NPCNavigationState.Walk)
 		{
 			if (navigationState==NPCNavigationState.TrackPlayer)
 			{
 				DogScript dogScript=player.GetComponent<DogScript>();
-				dogScript.currentObserverCount--; 
+				dogScript.currentObserverCount--;
+				if (dogScript.currentObserverCount < 0) {
+					dogScript.currentObserverCount = 0;
+				}
 			}
 			audio.Stop();
 		}

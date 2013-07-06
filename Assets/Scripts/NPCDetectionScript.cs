@@ -8,7 +8,7 @@ public class NPCDetectionScript : MonoBehaviour {
 	public float minPlayerDetectDistance=0.2f; // the distance the player can come behind the enemy without being deteacted
 	public float rayRange=10.0f; // distance the enemy can "see" in front of him
 	private Vector3 rayDirection = Vector3.zero;
-
+	private bool couldSeePlayer = false;
 	public NPCNavigationScript navScript;
 
 	void Update()
@@ -17,10 +17,24 @@ public class NPCDetectionScript : MonoBehaviour {
 		{
 			Debug.Log("See player");
 			navScript.SwitchNavState(NPCNavigationScript.NPCNavigationState.TrackPlayer);
+			if (!couldSeePlayer) {
+				GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+				HUDScript hudScript = playerObject.GetComponent<HUDScript>();
+				
+				hudScript.OnStartDetectedByCivilian();
+				couldSeePlayer = true;
+			}
 		}
 		else
 		{
 			navScript.SwitchNavState(NPCNavigationScript.NPCNavigationState.Walk);
+			if (couldSeePlayer) {
+				GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+				HUDScript hudScript = playerObject.GetComponent<HUDScript>();
+				
+				hudScript.OnEndDetectedByCivilian();
+				couldSeePlayer = false;
+			}
 		}
 	}
 	

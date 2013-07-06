@@ -4,7 +4,9 @@ using System.Collections;
 public class DogScript : MonoBehaviour {
 	public OVRPlayerController PlayerController;
 	public float currentEmbarrassment;
+	public int currentObserverCount;
 	const float MinAttractionDistance = 20.0f;
+	const float UseageDistance = 3.0f;
 	static float AttractionSpeedFactor = 0.5f;
 	
 	// Use this for initialization
@@ -28,6 +30,9 @@ public class DogScript : MonoBehaviour {
 			if (ptOfEmbarrassmentScript.UsedTimer <= 0.0f &&
 				distanceSquared < MinAttractionDistance * MinAttractionDistance) {
 				AttractPlayerToEmbarrassmentPoint(embarrasmentObject);
+				if (distanceSquared < UseageDistance*UseageDistance) {
+					ptOfEmbarrassmentScript.Use(this);
+				}
 			}
 		}
 	}

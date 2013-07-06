@@ -2,13 +2,25 @@ using UnityEngine;
 using System.Collections;
 
 public class HUDScript : MonoBehaviour {
+	
+	class HUDMessage {
+		public string message;
+		public float duration;
+		
+		public HUDMessage(string m, float d) {
+			message = m;
+			duration = d;
+		}
+	};
+	
 	public float 	FadeInTime    		= 2.0f;
 	public Texture 	FadeInTexture 		= null;
 	public Texture 	ObservedStatusTexture = null;
 	public Texture	EmbarrassmentMeterTexture = null;
 	public Texture	EmbarrassmentMeterBorderTexture = null;
 	public Font 	FontReplace			= null;
-
+	
+	private Queue<HUDMessage> messageQueue = new Queue<HUDMessage>();
 	private OVRGUI  		GuiHelper 		 = new OVRGUI();
 	private GameObject      GUIRenderObject  = null;
 	private RenderTexture	GUIRenderTexture = null;
@@ -23,10 +35,13 @@ public class HUDScript : MonoBehaviour {
 	private float meterShowTimer = -1.0f;
 	private float displayedEmbarrassmentPortion = 0.0f;
 	private float targetEmbarrassmentPortion = 0.0f;
-	private string meterMessage = "";
+	private string message = "";
+	private float messageTimer;
+	private float messageDuration;
 	
 	const float MeterFadeDuration = 0.6f;
 	const float MeterShowDuration = 4.3f;
+	const float MessageFadeDuration = 0.6f;
 	
 	public void OnStartDetectedByCivilian() {
 		detectedByCivilianCount++;
@@ -48,11 +63,11 @@ public class HUDScript : MonoBehaviour {
 		newPortion = Mathf.Clamp(newPortion, 0.0f, 1.0f);
 		targetEmbarrassmentPortion = newPortion;
 		if (newPortion > displayedEmbarrassmentPortion) {
-			meterMessage = "Owner Embarrassment Increased :-)";
+			message = "Owner Embarrassment Increased :-)";
 		} else if (newPortion < displayedEmbarrassmentPortion) {
-			meterMessage = "Owner Embarrassment Decreased :-(";
+			message = "Owner Embarrassment Decreased :-(";
 		} else {
-			meterMessage = "";
+			message = null;
 		}
 		
 		if (IsMeterFadingIn()) {
@@ -64,6 +79,12 @@ public class HUDScript : MonoBehaviour {
 		} else {
 			meterShowTimer = 0.0f;
 		}
+	}
+	
+	public void ShowMessage(string messageToShow, float duration) {
+		message = messageToShow;
+		messageTimer = 0.0f;
+		messageDuration = duration;
 	}
 	
 	private bool IsMeterShowing() {
@@ -101,6 +122,16 @@ public class HUDScript : MonoBehaviour {
 			Debug.LogWarning("OVRMainMenu: More then 1 OVRCameraController attached.");
 		else
 			CameraController = CameraControllers[0];
+		
+		EnqueueMessage("Use W, A, S, D to move", 5.0f);
+		EnqueueMessage("Bob your head up and down to run", 4.0f);
+		EnqueueMessage("Embarrass your owner by peeing on things...", 4.0f);
+		EnqueueMessage("...and barking at other dogs and children...", 4.0f);
+		EnqueueMessage("...that's right, Bark!", 4.0f);
+	}
+	
+	public void EnqueueMessage(string messageToEnqueue, float duration) {
+		messageQueue.Enqueue(new HUDMessage(messageToEnqueue, duration));
 	}
 	
 	// Use this for initialization
@@ -170,6 +201,7 @@ public class HUDScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		/*
 		// Test: Incrment civ count with u, dec with i
 		if (Input.GetKeyDown(KeyCode.U) == true) {
 			OnStartDetectedByCivilian();
@@ -188,6 +220,17 @@ public class HUDScript : MonoBehaviour {
 		} else if (Input.GetKeyDown(KeyCode.M) == true) {
 			SetEmbarrassmentPortion(targetEmbarrassmentPortion - 0.1f);
 		}
+		*/
+		if (IsMessageShowing()) {
+			messageTimer += Time.deltaTime;
+			if (messageTimer > messageDuration) {
+				message = null;
+			}
+		} else if (messageQueue.Count > 0) {
+			HUDMessage newMessage = messageQueue.Dequeue();
+			
+			ShowMessage(newMessage.message, newMessage.duration);
+		}
 		if (IsMeterShowing()) {
 			meterShowTimer += Time.deltaTime;
 			float timeRemaining = (MeterShowDuration - MeterFadeDuration) - meterShowTimer;
@@ -203,6 +246,10 @@ public class HUDScript : MonoBehaviour {
 				displayedEmbarrassmentPortion = Mathf.Clamp(displayedEmbarrassmentPortion, 0.0f, 1.0f);
 			}
 		}
+	}
+	
+	bool IsMessageShowing() {
+		return message != null;
 	}
 	
 	void OnGUI()
@@ -263,8 +310,17 @@ public class HUDScript : MonoBehaviour {
 		// is removed from GUI)
 		GuiHelper.SetFontReplace(FontReplace);
 		
-		//string loading = "MolyDog HUD";
-		//GuiHelper.StereoBox (StartX, StartY, WidthX, WidthY, ref loading, Color.yellow);
+		if (IsMessageShowing()) {
+			float alpha = 1.0f;
+			
+			if (messageTimer < MessageFadeDuration) {
+				alpha = messageTimer / MessageFadeDuration;
+			} else if (messageTimer > (messageDuration - MessageFadeDuration)) {
+				alpha = (messageDuration - messageTimer) /  MessageFadeDuration;
+				alpha = Mathf.Clamp(alpha, 0.0f, 1.0f);
+			}
+			GuiHelper.StereoBox (StartX, StartY, WidthX, WidthY, ref loading, Color.yellow * alpha);
+		}
 		if (ObservedStatusTexture != null) {
 			if (detectedByParkKeeperCount > 0) {
 				GuiHelper.StereoDrawTexture(200, 4, 880, 660, ref ObservedStatusTexture, Color.red);

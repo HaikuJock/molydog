@@ -29,7 +29,7 @@ public class OVRCameraController : OVRComponent
 {		
 	// PRIVATE MEMBERS
 	private bool   UpdateCamerasDirtyFlag = false;	
-	private Camera CameraLeft, CameraRight = null;
+	public Camera CameraLeft, CameraRight = null;
 	private float  IPD = 0.064f; 							// in millimeters
 	private float  LensOffsetLeft, LensOffsetRight = 0.0f;  // normalized screen space
 	private float  VerticalFOV = 90.0f;	 					// in degrees

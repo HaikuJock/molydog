@@ -16,11 +16,25 @@ public class MicrophoneController : MonoBehaviour {
 	float freq=0.0f;
 	float loudness=0.0f;
 	
+	float micRefreshTime=3.0f;
+	float micCurrentTime=0.0f;
+	bool refreshTime=false;
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
+	void ResetRefreshTimer()
+	{
+		micCurrentTime=0.0f;
+		refreshTime=false;
+	}
+	
+	void ResetController()
+	{
+		barked=false;
+		pant=false;		
+	}
 	// Update is called once per frame
 	void Update () {
 		pitch=input.pitch;
@@ -28,25 +42,27 @@ public class MicrophoneController : MonoBehaviour {
 		loudness=input.loudness;
 		if (input.loudness>barkLoudness)
 		{
-
+			refreshTime=true;
 			DoBark();
 		}
-		else if (input.loudness>pantLoudness && input.loudness<barkLoudness){
-			DoPant();
-		}
-		else
+		if (refreshTime)
 		{
-			barked=false;
-			pant=false;
+			micCurrentTime+=Time.deltaTime;
+			if (micCurrentTime>micRefreshTime)
+			{
+				ResetRefreshTimer();
+				ResetController();
+				
+			}
 		}
-
-
 	}
 	
 	void OnGUI()
 	{
+		if (barked){
 		GUI.Label(new Rect(10,10,400,100),string.Format("{0} pitch - {1} freq - {2} loudness - {3}",displayText,
 			pitch, freq,loudness));
+		}
 	}
 	
 	void DoBark()

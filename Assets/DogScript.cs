@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(AudioSource))]
 public class DogScript : MonoBehaviour {
 	public OVRPlayerController PlayerController;
+	public MicrophoneController micController;
 	public float currentEmbarrassment;
 	public int currentObserverCount;
 	public AudioClip WuffClip;
@@ -18,6 +19,7 @@ public class DogScript : MonoBehaviour {
 	const float UseageDistance = 3.0f;
 	static float AttractionSpeedFactor = 0.5f;
 	static float MaxEmbarrassment = 30.0f;
+	public bool embarrass=false;
 	
 	// Use this for initialization
 	void Start () {
@@ -26,6 +28,13 @@ public class DogScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		embarrass=micController.barked;
+		//if we have done the action required then up embarrassment for mic ones(just bark at the mo)
+		if (embarrass)
+		{
+			Debug.Log("embarrass");
+			//embarrass=true;
+		}		
 		UpdateAttractionToEmbarrassmentPoints();
 	}
 	
@@ -69,6 +78,8 @@ public class DogScript : MonoBehaviour {
 			PointOfEmbarrassmentScript ptOfEmbarrassmentScript = embarrasmentObject.GetComponent<PointOfEmbarrassmentScript>();
 			float distanceSquared = Vector3.SqrMagnitude(embarrasmentObject.transform.position - pt);
 			
+
+			
 			if (ptOfEmbarrassmentScript.UsedTimer <= 0.0f &&
 				distanceSquared < MinAttractionDistance * MinAttractionDistance) {
 				AttractPlayerToEmbarrassmentPoint(embarrasmentObject);
@@ -80,17 +91,22 @@ public class DogScript : MonoBehaviour {
 	}
 	
 	void UseEmbarrassmentPoint(PointOfEmbarrassmentScript ptOfEmbarrassmentScript) {
+		
+		
 		GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+		
 		HUDScript hudScript = playerObject.GetComponent<HUDScript>();
 		float embarrassmentPortion = currentEmbarrassment / MaxEmbarrassment;
+		if (embarrass){
+			ptOfEmbarrassmentScript.Use(this);
+			hudScript.SetEmbarrassmentPortion(currentEmbarrassment / MaxEmbarrassment);
 		
-		ptOfEmbarrassmentScript.Use(this);
-		hudScript.SetEmbarrassmentPortion(currentEmbarrassment / MaxEmbarrassment);
-		
-		if (embarrassmentPortion >= 1.0f) {
-			audio.PlayOneShot(OhYeahClip, Random.RandomRange(0.8f, 1.0f));
-		} else {
-			PlayHappyNoise();
+			if (embarrassmentPortion >= 1.0f) {
+				audio.PlayOneShot(OhYeahClip, Random.RandomRange(0.8f, 1.0f));
+			} else {
+				PlayHappyNoise();
+				embarrass=false;
+			}
 		}
 	}
 	

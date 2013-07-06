@@ -1,10 +1,19 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
 public class DogScript : MonoBehaviour {
 	public OVRPlayerController PlayerController;
 	public float currentEmbarrassment;
 	public int currentObserverCount;
+	public AudioClip WuffClip;
+	public AudioClip HappyBark1Clip;
+	public AudioClip HappyBark2Clip;
+	public AudioClip HowlClip;
+	public AudioClip Panting3SecondsClip;
+	public AudioClip ThreePants1Clip;
+	public AudioClip OhYeahClip;
+	public AudioClip ThreeAngryBarksClip;
 	const float MinAttractionDistance = 20.0f;
 	const float UseageDistance = 3.0f;
 	static float AttractionSpeedFactor = 0.5f;
@@ -20,10 +29,40 @@ public class DogScript : MonoBehaviour {
 		UpdateAttractionToEmbarrassmentPoints();
 	}
 	
+	void PlayAngryNoise() {
+		if (audio.isPlaying) {
+			return;
+		}
+		audio.PlayOneShot(ThreeAngryBarksClip, Random.RandomRange(0.8f, 1.0f));
+	}
+	
+	void PlayHappyNoise() {
+		if (audio.isPlaying) {
+			return;
+		}
+		float randomNoise = Random.RandomRange(0.0f, 1.0f);
+		float randomVolume = Random.RandomRange(0.8f, 1.0f);
+		float embarrassmentPortion = currentEmbarrassment / MaxEmbarrassment;
+		
+		if (embarrassmentPortion < 0.5f) {
+			if (randomNoise < 0.33333f) {
+				audio.PlayOneShot(WuffClip, randomVolume);
+			} else if (randomNoise < 0.66666f) {
+				audio.PlayOneShot(HappyBark1Clip, randomVolume);
+			} else {
+				audio.PlayOneShot(HappyBark2Clip, randomVolume);
+			}
+		} else {
+			if (randomNoise < 0.5f) {
+				audio.PlayOneShot(Panting3SecondsClip, randomVolume);
+			} else {
+				audio.PlayOneShot(ThreePants1Clip, randomVolume);
+			}
+		}
+	}
+	
 	void UpdateAttractionToEmbarrassmentPoints() {
 		GameObject[] objects = GameObject.FindGameObjectsWithTag("PointOfEmbarrassment");
-		GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-		HUDScript hudScript = playerObject.GetComponent<HUDScript>();
 		Vector3 pt = PlayerController.transform.position;
 		
 		foreach (GameObject embarrasmentObject in objects) {
@@ -34,10 +73,24 @@ public class DogScript : MonoBehaviour {
 				distanceSquared < MinAttractionDistance * MinAttractionDistance) {
 				AttractPlayerToEmbarrassmentPoint(embarrasmentObject);
 				if (distanceSquared < UseageDistance*UseageDistance) {
-					ptOfEmbarrassmentScript.Use(this);
-					hudScript.SetEmbarrassmentPortion(currentEmbarrassment / MaxEmbarrassment);
+					UseEmbarrassmentPoint(ptOfEmbarrassmentScript);
 				}
 			}
+		}
+	}
+	
+	void UseEmbarrassmentPoint(PointOfEmbarrassmentScript ptOfEmbarrassmentScript) {
+		GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+		HUDScript hudScript = playerObject.GetComponent<HUDScript>();
+		float embarrassmentPortion = currentEmbarrassment / MaxEmbarrassment;
+		
+		ptOfEmbarrassmentScript.Use(this);
+		hudScript.SetEmbarrassmentPortion(embarrassmentPortion);
+		
+		if (embarrassmentPortion >= 1.0f) {
+			audio.PlayOneShot(OhYeahClip, Random.RandomRange(0.8f, 1.0f));
+		} else {
+			PlayHappyNoise();
 		}
 	}
 	

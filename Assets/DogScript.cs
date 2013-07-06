@@ -5,6 +5,8 @@ using System.Collections;
 public class DogScript : MonoBehaviour {
 	public OVRPlayerController PlayerController;
 	public MicrophoneController micController;
+	public HeadMovementControl headController;
+	
 	public float currentEmbarrassment;
 	public int currentObserverCount;
 	public AudioClip WuffClip;
@@ -28,12 +30,11 @@ public class DogScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		embarrass=micController.barked;
+		embarrass=micController.barked || headController.pee;
 		//if we have done the action required then up embarrassment for mic ones(just bark at the mo)
 		if (embarrass)
 		{
 			Debug.Log("embarrass");
-			//embarrass=true;
 		}		
 		UpdateAttractionToEmbarrassmentPoints();
 	}
@@ -118,6 +119,6 @@ public class DogScript : MonoBehaviour {
 		float attractionPortion = Mathf.SmoothStep(0.0f, 1.0f, Mathf.SmoothStep(0.0f, 1.0f, distancePortion));
 		float attractionMagnitude = attractionPortion * Time.deltaTime * ptOfEmbarrassmentScript.AttractionLevel;
 		
-		PlayerController.AddAttractionMove(Vector3.Normalize(toAttraction) * attractionMagnitude * AttractionSpeedFactor);
+		//PlayerController.AddAttractionMove(Vector3.Normalize(toAttraction) * attractionMagnitude * AttractionSpeedFactor);
 	}		
 }

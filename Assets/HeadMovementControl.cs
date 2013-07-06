@@ -30,6 +30,8 @@ public class HeadMovementControl : MonoBehaviour {
 	static float PitchMagnitudeDown = 13.0f;
 	static float MaxHeadRunSpeed = 4.0f;
 	static float HeadPitchFrequencyToSpeedFactor = 2.5f;
+	
+	public bool pee=false;
 
 	
 	// Use this for initialization
@@ -39,6 +41,19 @@ public class HeadMovementControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetKeyDown(KeyCode.P))
+		{
+			StartPeeSound();
+			pee=true;
+		}
+		if (Input.GetKeyDown(KeyCode.LeftShift))
+		{
+			HeadRunSpeed=MaxHeadRunSpeed;
+		}
+		//else
+		///{
+		//	HeadRunSpeed=1.0f;
+		//}
 		UpdatePeeing();
 		UpdateHeadRunSpeed();
 	}
@@ -110,6 +125,7 @@ public class HeadMovementControl : MonoBehaviour {
 			}
 		} else {
 			FadePeeSoundToStop();
+			
 		}
 	}
 	
@@ -126,6 +142,7 @@ public class HeadMovementControl : MonoBehaviour {
 	}
 	
 	void StartPeeSound() {
+		pee=true;
 		if (Random.value < 0.5) {
 			audio.clip = PeeClip1;
 			audio.Play();
@@ -140,6 +157,7 @@ public class HeadMovementControl : MonoBehaviour {
 		if (peeingDuration >= MaxPeeDuration) {
 			audio.Stop();
 			peeingDuration = 0.0f;
+			
 		} else if (audio.isPlaying) {
 			float currentVolume = audio.volume;
 			
@@ -148,9 +166,11 @@ public class HeadMovementControl : MonoBehaviour {
 			if (currentVolume <= 0.0f) {
 				audio.Stop();
 				peeingDuration = 0.0f;
+				pee=false;
 			} else {
 				audio.volume = currentVolume;
 			}
 		}
+		//
 	}
 }

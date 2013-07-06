@@ -45,6 +45,6 @@ public class DogScript : MonoBehaviour {
 		float attractionPortion = Mathf.SmoothStep(0.0f, 1.0f, Mathf.SmoothStep(0.0f, 1.0f, distancePortion));
 		float attractionMagnitude = attractionPortion * Time.deltaTime * ptOfEmbarrassmentScript.AttractionLevel;
 		
-		PlayerController.Move(Vector3.Normalize(toAttraction) * attractionMagnitude * AttractionSpeedFactor);
+		PlayerController.AddAttractionMove(Vector3.Normalize(toAttraction) * attractionMagnitude * AttractionSpeedFactor);
 	}		
 }

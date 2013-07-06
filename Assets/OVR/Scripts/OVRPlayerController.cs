@@ -69,6 +69,7 @@ public class OVRPlayerController : OVRComponent
 	
 	// TEST: Get Y from second sensor
 	private float YfromSensor2            = 0.0f;
+	private Vector3 attractionMove = Vector3.zero;
 	
 	// * * * * * * * * * * * * *
 	
@@ -169,7 +170,8 @@ public class OVRPlayerController : OVRComponent
 											 new Vector3(1, 0, 1));	
 		
 		// Move contoller
-		Controller.Move(moveDirection);
+		Controller.Move(moveDirection + attractionMove);
+		attractionMove = Vector3.zero;
 		
 		Vector3 actualXZ = Vector3.Scale(Controller.transform.localPosition, new Vector3(1, 0, 1));
 		
@@ -181,8 +183,8 @@ public class OVRPlayerController : OVRComponent
 		UpdatePlayerForwardDirTransform();
 	}
 	
-	public void Move(Vector3 direction) {
-		Controller.Move(direction);
+	public void AddAttractionMove(Vector3 velocity) {
+		attractionMove += velocity;
 	}
 		
 	// UpdateMovement

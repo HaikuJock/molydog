@@ -64,11 +64,9 @@ public class HUDScript : MonoBehaviour {
 		newPortion = Mathf.Clamp(newPortion, 0.0f, 1.0f);
 		targetEmbarrassmentPortion = newPortion;
 		if (newPortion > displayedEmbarrassmentPortion) {
-			message = "Owner Embarrassment Increased :-)";
+			ShowMessage("Owner Embarrassment Increased :-)", 4.9f);
 		} else if (newPortion < displayedEmbarrassmentPortion) {
-			message = "Owner Embarrassment Decreased :-(";
-		} else {
-			message = null;
+			ShowMessage("Owner Embarrassment Increased :-)", 4.9f);
 		}
 		
 		if (IsMeterFadingIn()) {
@@ -126,9 +124,10 @@ public class HUDScript : MonoBehaviour {
 		
 		EnqueueMessage("Use W, A, S, D to move", 5.0f);
 		EnqueueMessage("Bob your head up and down to run", 4.0f);
-		EnqueueMessage("Embarrass your owner by peeing on things...", 4.0f);
-		EnqueueMessage("...and barking at other dogs and children...", 4.0f);
+		EnqueueMessage("Tilt your head to pee", 4.0f);
+		EnqueueMessage("To bark, just bark...", 4.0f);
 		EnqueueMessage("...that's right, Bark!", 4.0f);
+		EnqueueMessage("Embarrass your owner before the end of your walk.", 4.0f);
 	}
 	
 	public void EnqueueMessage(string messageToEnqueue, float duration) {

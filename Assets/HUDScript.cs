@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HUDScript : MonoBehaviour {
 	
@@ -319,7 +320,7 @@ public class HUDScript : MonoBehaviour {
 				alpha = (messageDuration - messageTimer) /  MessageFadeDuration;
 				alpha = Mathf.Clamp(alpha, 0.0f, 1.0f);
 			}
-			GuiHelper.StereoBox (StartX, StartY, WidthX, WidthY, ref loading, Color.yellow * alpha);
+			GuiHelper.StereoBox (StartX, StartY, WidthX, WidthY, ref message, Color.yellow * alpha);
 		}
 		if (ObservedStatusTexture != null) {
 			if (detectedByParkKeeperCount > 0) {

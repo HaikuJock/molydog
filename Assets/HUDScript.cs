@@ -5,6 +5,8 @@ public class HUDScript : MonoBehaviour {
 	public float 	FadeInTime    		= 2.0f;
 	public Texture 	FadeInTexture 		= null;
 	public Texture 	ObservedStatusTexture = null;
+	public Texture	EmbarrassmentMeterTexture = null;
+	public Texture	EmbarrassmentMeterBorderTexture = null;
 	public Font 	FontReplace			= null;
 
 	private OVRGUI  		GuiHelper 		 = new OVRGUI();
@@ -18,6 +20,13 @@ public class HUDScript : MonoBehaviour {
 	private int    	WidthY			= 23;
 	private int detectedByCivilianCount = 0;
 	private int detectedByParkKeeperCount = 0;
+	private float meterShowTimer = -1.0f;
+	private float displayedEmbarrassmentPortion = 0.0f;
+	private float targetEmbarrassmentPortion = 0.0f;
+	private string meterMessage = "";
+	
+	const float MeterFadeDuration = 0.6f;
+	const float MeterShowDuration = 4.3f;
 	
 	public void OnStartDetectedByCivilian() {
 		detectedByCivilianCount++;
@@ -35,6 +44,53 @@ public class HUDScript : MonoBehaviour {
 		detectedByParkKeeperCount--;
 	}
 	
+	public void SetEmbarrassmentPortion(float newPortion) {
+		newPortion = Mathf.Clamp(newPortion, 0.0f, 1.0f);
+		targetEmbarrassmentPortion = newPortion;
+		if (newPortion > displayedEmbarrassmentPortion) {
+			meterMessage = "Owner Embarrassment Increased :-)";
+		} else if (newPortion < displayedEmbarrassmentPortion) {
+			meterMessage = "Owner Embarrassment Decreased :-(";
+		} else {
+			meterMessage = "";
+		}
+		
+		if (IsMeterFadingIn()) {
+			// continue fading in
+		} else if (IsMeterFadingOut()) {
+			meterShowTimer = MeterShowDuration - meterShowTimer; // fade back in
+		} else if (IsMeterShowing()) {
+			meterShowTimer = MeterFadeDuration;
+		} else {
+			meterShowTimer = 0.0f;
+		}
+	}
+	
+	private bool IsMeterShowing() {
+		return meterShowTimer >= 0.0f;
+	}
+	
+	private bool IsMeterFadingIn() {
+		return meterShowTimer >= 0.0f && meterShowTimer < MeterFadeDuration;
+	}
+	
+	private bool IsMeterFadingOut() {
+		return meterShowTimer >= (MeterShowDuration - MeterFadeDuration) && meterShowTimer < MeterShowDuration;
+	}
+	
+	private float MeterAlpha() {
+		if (IsMeterFadingIn()) {
+			return meterShowTimer / MeterFadeDuration;
+		} else if (IsMeterFadingOut()) {
+			float portion = 1.0f - (meterShowTimer - (MeterShowDuration - MeterFadeDuration)) / MeterFadeDuration;
+			return Mathf.Clamp(portion, 0.0f, 1.0f);
+		} else if (IsMeterShowing()) {
+			return 1.0f;
+		} else {
+			return 0.0f;
+		}
+	}
+	
 	void Awake() {
 		OVRCameraController[] CameraControllers;
 		CameraControllers = gameObject.GetComponentsInChildren<OVRCameraController>();
@@ -50,6 +106,9 @@ public class HUDScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		AlphaFadeValue = 1.0f;
+		meterShowTimer = -1.0f;
+		targetEmbarrassmentPortion = 0.0f;
+		displayedEmbarrassmentPortion = 0.0f;
 		
 		if(CameraController != null)
 		{
@@ -123,6 +182,27 @@ public class HUDScript : MonoBehaviour {
 		} else if (Input.GetKeyDown(KeyCode.K) == true) {
 			OnEndDetectedByParkKeeper();
 		}
+		// Test: Increment/decrement embarrassment portion
+		if (Input.GetKeyDown(KeyCode.N) == true) {
+			SetEmbarrassmentPortion(targetEmbarrassmentPortion + 0.1f);
+		} else if (Input.GetKeyDown(KeyCode.M) == true) {
+			SetEmbarrassmentPortion(targetEmbarrassmentPortion - 0.1f);
+		}
+		if (IsMeterShowing()) {
+			meterShowTimer += Time.deltaTime;
+			float timeRemaining = (MeterShowDuration - MeterFadeDuration) - meterShowTimer;
+			float distance = targetEmbarrassmentPortion - displayedEmbarrassmentPortion;
+			
+			if (timeRemaining <= 0.0f) {
+				displayedEmbarrassmentPortion = targetEmbarrassmentPortion;
+				if (meterShowTimer >= MeterShowDuration) {
+					meterShowTimer = -1.0f;
+				}
+			} else {
+				displayedEmbarrassmentPortion += distance / timeRemaining * Time.deltaTime;
+				displayedEmbarrassmentPortion = Mathf.Clamp(displayedEmbarrassmentPortion, 0.0f, 1.0f);
+			}
+		}
 	}
 	
 	void OnGUI()
@@ -191,6 +271,13 @@ public class HUDScript : MonoBehaviour {
 			} else if (detectedByCivilianCount > 0) {
 				GuiHelper.StereoDrawTexture(100, 20, 1080, 400, ref ObservedStatusTexture, Color.green);
 			}
+		}
+		
+		if (IsMeterShowing()) {
+			float MaxWidth = 300.0f;
+			float width = MaxWidth * displayedEmbarrassmentPortion;
+			GuiHelper.StereoDrawTexture(490, 400, (int)width, 64, ref EmbarrassmentMeterTexture, Color.white * MeterAlpha());
+			GuiHelper.StereoDrawTexture(490, 400, (int)MaxWidth, 64, ref EmbarrassmentMeterBorderTexture, Color.white * MeterAlpha());
 		}
 		
 		// Restore active render texture

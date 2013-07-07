@@ -119,7 +119,9 @@ public class DogScript : MonoBehaviour {
 			if (embarrassmentPortion >= 1.0f) {
 				audio.PlayOneShot(OhYeahClip, Random.Range(0.8f, 1.0f));
 			} else {
-				PlayHappyNoise();
+				if (gameManager.HasGameStarted()) {
+					PlayHappyNoise();
+				}
 				embarrass=false;
 			}
 		}

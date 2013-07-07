@@ -242,7 +242,7 @@ public class OVRPlayerController : OVRComponent
 		// Compute this for key movement
 		float moveInfluence = Acceleration * 0.1f * MoveScale * MoveScaleMultiplier;
 		
-		HeadMovementControl headControl = gameObject.GetComponent<HeadMovementControl>();
+		HeadMovementControl headControl = gameObject.transform.FindChild("OVRCameraController").GetComponent<HeadMovementControl>();
 		
 		if (headControl.HeadRunSpeed > 1.0f) {
 			moveInfluence *= headControl.HeadRunSpeed;

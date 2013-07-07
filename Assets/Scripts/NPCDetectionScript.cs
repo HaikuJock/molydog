@@ -10,7 +10,12 @@ public class NPCDetectionScript : MonoBehaviour {
 	private Vector3 rayDirection = Vector3.zero;
 	private bool couldSeePlayer = false;
 	public NPCNavigationScript navScript;
-
+	
+	void Start()
+	{
+		playerObject = GameObject.FindGameObjectWithTag("Player");
+	}
+	
 	void Update()
 	{
 		if (CanSeePlayer())
@@ -18,7 +23,7 @@ public class NPCDetectionScript : MonoBehaviour {
 			Debug.Log("See player");
 			navScript.SwitchNavState(NPCNavigationScript.NPCNavigationState.TrackPlayer);
 			if (!couldSeePlayer) {
-				GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+				playerObject = GameObject.FindGameObjectWithTag("Player");
 				HUDScript hudScript = playerObject.GetComponent<HUDScript>();
 				
 				hudScript.OnStartDetectedByCivilian();
@@ -29,7 +34,7 @@ public class NPCDetectionScript : MonoBehaviour {
 		{
 			navScript.SwitchNavState(NPCNavigationScript.NPCNavigationState.Walk);
 			if (couldSeePlayer) {
-				GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+				playerObject = GameObject.FindGameObjectWithTag("Player");
 				HUDScript hudScript = playerObject.GetComponent<HUDScript>();
 				
 				hudScript.OnEndDetectedByCivilian();

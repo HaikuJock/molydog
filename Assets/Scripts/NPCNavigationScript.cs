@@ -34,6 +34,7 @@ public class NPCNavigationScript : MonoBehaviour {
 			case NPCNavigationState.Stopped:
 			case NPCNavigationState.TrackPlayer:
 			{
+				MoveToPlayer();
 				break;	
 			}	
 			case NPCNavigationState.Walk:
@@ -61,6 +62,7 @@ public class NPCNavigationScript : MonoBehaviour {
 	
 	void TrackPlayer()
 	{
+		
 	}
 	
 	void MoveToNextWaypoint()
@@ -77,7 +79,12 @@ public class NPCNavigationScript : MonoBehaviour {
 	
 	void MoveToPlayer()
 	{
-		agent.destination=player.position;
+		//agent.destination=player.position;
+		agent.enabled=false;
+		transform.LookAt(player.transform.position);
+		
+		//transition back to walk state after a bit
+		
 	}
 	
 	public void SwitchNavState(NPCNavigationState newState)
@@ -87,8 +94,9 @@ public class NPCNavigationScript : MonoBehaviour {
 		{
 			if (navigationState!=NPCNavigationState.TrackPlayer)
 			{
-				DogScript dogScript=player.GetComponent<DogScript>();
-				dogScript.currentObserverCount++;		
+				//TODO: Find why we can't access the dog script 
+				//DogScript dogScript=player.GetComponent<DogScript>();
+				//dogScript.currentObserverCount++;		
 			}
 			audio.Stop();
 			MoveToPlayer();

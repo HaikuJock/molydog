@@ -10,9 +10,17 @@ public class HeadMovementControl : MonoBehaviour {
 	// Peeing
 	public AudioClip PeeClip1;
 	public AudioClip PeeClip2;
+	public AudioClip Pant1;
+	public AudioClip Pant2;
+	public AudioClip Pant3;
+	public AudioClip Pant4;
+	public AudioClip Pant5;
+	public AudioClip Pant6;
 	
 	private bool peeingLeft;
 	private bool peeingRight;
+	private bool playingPantSound;
+	private bool playingPeeSound;
 	private float peeingDuration;
 	
 	static float MaxPeeDuration = 16.323f;
@@ -61,6 +69,10 @@ public class HeadMovementControl : MonoBehaviour {
 		///{
 		//	HeadRunSpeed=1.0f;
 		//}
+		if (!audio.isPlaying) {
+			playingPantSound = false;
+			playingPeeSound = false;
+		}
 		UpdatePeeing();
 		UpdateHeadRunSpeed();
 	}
@@ -94,6 +106,26 @@ public class HeadMovementControl : MonoBehaviour {
 		} else if ((Time.time - timeOfLastDownPitch) > Mathf.Min((1.0f / frequencyOfHeadDownPitches) * 0.1f, 1.5f) &&
 				   (Time.time - timeOfLastUpPitch) > Mathf.Min((1.0f / frequencyOfHeadUpPitches) * 0.1f, 1.5f)) {
 			frequencyOfHeadPitches -= Time.deltaTime * HeadPitchFrequencyFalloffRate;
+			if (frequencyOfHeadPitches > 1.5f && !audio.isPlaying && !playingPantSound && Random.value < 0.333f) {
+				playingPantSound = true;
+				float randomPant = Random.value;
+				
+				if (randomPant < 0.1667f) {
+					audio.clip = Pant1;
+				} else if (randomPant < 0.3333f) {
+					audio.clip = Pant2;
+				} else if (randomPant < 0.5f) {
+					audio.clip = Pant3;
+				} else if (randomPant < 0.6667f) {
+					audio.clip = Pant4;
+				} else if (randomPant < 0.8333f) {
+					audio.clip = Pant5;
+				} else {
+					audio.clip = Pant6;
+				}
+				audio.Play();
+				audio.volume = Random.Range(0.8f, 1.0f);
+			}
 		}
 		HeadRunSpeed = Mathf.Min(HeadPitchFrequencyToSpeedFactor * frequencyOfHeadPitches, MaxHeadRunSpeed);
 		//Debug.Log("HeadRunSpeed : " + HeadRunSpeed.ToString("G4"));
@@ -110,7 +142,7 @@ public class HeadMovementControl : MonoBehaviour {
 	}
 	
 	void UpdatePeeing() {
-		if (audio.isPlaying) {
+		if (audio.isPlaying && playingPeeSound) {
 			peeingDuration += Time.deltaTime;
 		}
 		
@@ -128,7 +160,7 @@ public class HeadMovementControl : MonoBehaviour {
 				peeingRight = false;
 				FadePeeSoundToStop();
 			}
-		} else if (!audio.isPlaying) {
+		} else if (!audio.isPlaying && !playingPeeSound) {
 			if (IsTiltingLeft()) {
 				peeingLeft = true;
 				StartPeeSound();
@@ -156,6 +188,7 @@ public class HeadMovementControl : MonoBehaviour {
 	void StartPeeSound() {
 		tutorial.DidPee();
 		pee=true;
+		playingPeeSound = true;
 		if (Random.value < 0.5) {
 			audio.clip = PeeClip1;
 			audio.Play();
@@ -167,6 +200,10 @@ public class HeadMovementControl : MonoBehaviour {
 	}
 	
 	void FadePeeSoundToStop() {
+		if (!playingPeeSound) {
+			peeingDuration = 0.0f;
+			return;
+		}
 		if (peeingDuration >= MaxPeeDuration) {
 			audio.Stop();
 			peeingDuration = 0.0f;
@@ -184,6 +221,5 @@ public class HeadMovementControl : MonoBehaviour {
 				audio.volume = currentVolume;
 			}
 		}
-		//
 	}
 }

@@ -14,6 +14,10 @@ public class GameManagerScript : MonoBehaviour {
 	const float FadeDuration = 0.3f;
 	const float GameDuration = 180.0f;
 	
+	const float GameOverDuration=20.0f;
+	
+	public float gameOverTimer=0.0f;
+	
 	// Use this for initialization
 	void Start () {
 		embarrassment = 0;
@@ -94,8 +98,16 @@ public class GameManagerScript : MonoBehaviour {
 	}
 	
 	private void OnGameOver() {
-		gameOver = true;
+		StartCoroutine("RestartLevel");
+		gameOver = true;		
 		ShowGameOverMessages();
+	}
+	
+	
+	IEnumerator RestartLevel()
+	{
+		yield return new WaitForSeconds(GameOverDuration);
+		Application.LoadLevel("MainGameScene");
 	}
 	
 	void OnGUI()

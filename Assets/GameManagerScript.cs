@@ -28,7 +28,7 @@ public class GameManagerScript : MonoBehaviour {
 		if (gameOver) {
 			return;
 		}
-		if (Input.GetKeyDown(KeyCode.U) == true) {
+		if (false && Input.GetKeyDown(KeyCode.U) == true) {
 			OnGameOver();
 		}
 

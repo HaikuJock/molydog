@@ -190,7 +190,7 @@ public class OVRCrosshair
 	// ShouldDisplayCrosshair
 	bool ShouldDisplayCrosshair()
 	{	
-		if(Input.GetKeyDown (KeyCode.C))
+		if(false && Input.GetKeyDown (KeyCode.C))
 		{
 			if(DisplayCrosshair == false)
 			{

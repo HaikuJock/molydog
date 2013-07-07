@@ -163,14 +163,14 @@ public class OVRMagCalibration
 		bool calibrateInput = false;
 		
 		// Auto
-		if(Input.GetKeyDown (KeyCode.X) == true)
+		if(false && Input.GetKeyDown (KeyCode.X) == true)
 		{
 			MagAutoCalibrate = true;
 			calibrateInput = true;
 		}
 		
 		// Manual
-		if(Input.GetKeyDown (KeyCode.Z) == true) 
+		if(false && Input.GetKeyDown (KeyCode.Z) == true) 
 		{
 			MagAutoCalibrate = false;
 			calibrateInput = true;
@@ -251,7 +251,7 @@ public class OVRMagCalibration
 		if (MagCalState == MagCalibrationState.MagReady)
 		{
 			// Toggle showing geometry either on or off	
-			if (Input.GetKeyDown (KeyCode.F6))
+			if (false && Input.GetKeyDown (KeyCode.F6))
 			{	
 				if(MagShowGeometry == false)
 				{

@@ -41,12 +41,12 @@ public class HeadMovementControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.P))
+		if (false && Input.GetKeyDown(KeyCode.P))
 		{
 			StartPeeSound();
 			pee=true;
 		}
-		if (Input.GetKeyDown(KeyCode.LeftShift))
+		if (false && Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			HeadRunSpeed=MaxHeadRunSpeed;
 		}

@@ -346,14 +346,14 @@ public class OVRMainMenu : MonoBehaviour
 	// UpdateIPD
 	void UpdateIPD()
 	{
-		if(Input.GetKeyDown (KeyCode.Equals))
+		if(false && Input.GetKeyDown (KeyCode.Equals))
 		{
 			float ipd = 0;
 			CameraController.GetIPD(ref ipd);
 			ipd += IPDIncrement;
 			CameraController.SetIPD (ipd);
 		}
-		else if(Input.GetKeyDown (KeyCode.Minus))
+		else if(false && Input.GetKeyDown (KeyCode.Minus))
 		{
 			float ipd = 0;
 			CameraController.GetIPD(ref ipd);
@@ -373,7 +373,7 @@ public class OVRMainMenu : MonoBehaviour
 	void UpdatePrediction()
 	{
 		// Turn prediction on/off
-		if(Input.GetKeyDown (KeyCode.P))
+		if(false && Input.GetKeyDown (KeyCode.P))
 		{		
 			if( CameraController.PredictionOn == false) 
 				CameraController.PredictionOn = true;
@@ -385,9 +385,9 @@ public class OVRMainMenu : MonoBehaviour
 		if(CameraController.PredictionOn == true)
 		{
 			float pt = OVRDevice.GetPredictionTime(0); 
-			if(Input.GetKeyDown (KeyCode.Comma))
+			if(false && Input.GetKeyDown (KeyCode.Comma))
 				pt -= PredictionIncrement;
-			else if(Input.GetKeyDown (KeyCode.Period))
+			else if(false && Input.GetKeyDown (KeyCode.Period))
 				pt += PredictionIncrement;
 			
 			OVRDevice.SetPredictionTime(0, pt);
@@ -407,14 +407,14 @@ public class OVRMainMenu : MonoBehaviour
 	// UpdateFOV
 	void UpdateFOV()
 	{
-		if(Input.GetKeyDown (KeyCode.LeftBracket))
+		if(false && Input.GetKeyDown (KeyCode.LeftBracket))
 		{
 			float cfov = 0;
 			CameraController.GetVerticalFOV(ref cfov);
 			cfov -= FOVIncrement;
 			CameraController.SetVerticalFOV(cfov);
 		}
-		else if (Input.GetKeyDown (KeyCode.RightBracket))
+		else if (false && Input.GetKeyDown (KeyCode.RightBracket))
 		{
 			float cfov = 0;
 			CameraController.GetVerticalFOV(ref cfov);
@@ -442,14 +442,14 @@ public class OVRMainMenu : MonoBehaviour
 		// Get the distortion coefficients to apply to shader
 		CameraController.GetDistortionCoefs(ref Dk0, ref Dk1, ref Dk2, ref Dk3);
 		
-		if(Input.GetKeyDown(KeyCode.Alpha1))
+		if(false && Input.GetKeyDown(KeyCode.Alpha1))
 			Dk1 -= DistKIncrement;
-		else if (Input.GetKeyDown(KeyCode.Alpha2))
+		else if (false && Input.GetKeyDown(KeyCode.Alpha2))
 			Dk1 += DistKIncrement;
 			
-		if(Input.GetKeyDown(KeyCode.Alpha3))
+		if(false && Input.GetKeyDown(KeyCode.Alpha3))
 			Dk2 -= DistKIncrement;
-		else if (Input.GetKeyDown(KeyCode.Alpha4))
+		else if (false && Input.GetKeyDown(KeyCode.Alpha4))
 			Dk2 += DistKIncrement;
 		
 		CameraController.SetDistortionCoefs(Dk0, Dk1, Dk2, Dk3);
@@ -464,14 +464,14 @@ public class OVRMainMenu : MonoBehaviour
 	{
 		// We will update neck position, since camera root and eye center should
 		// be set differently.
-		if(Input.GetKeyDown(KeyCode.Alpha5))
+		if(false && Input.GetKeyDown(KeyCode.Alpha5))
 		{	
 			Vector3 neckPosition = Vector3.zero;
 			CameraController.GetNeckPosition(ref neckPosition);
 			neckPosition.y -= HeightIncrement;
 			CameraController.SetNeckPosition(neckPosition);
 		}
-		else if (Input.GetKeyDown(KeyCode.Alpha6))
+		else if (false && Input.GetKeyDown(KeyCode.Alpha6))
 		{
 			Vector3 neckPosition = Vector3.zero;;
 			CameraController.GetNeckPosition(ref neckPosition);
@@ -493,17 +493,17 @@ public class OVRMainMenu : MonoBehaviour
 	{
 		float moveScaleMultiplier = 0.0f;
 		PlayerController.GetMoveScaleMultiplier(ref moveScaleMultiplier);
-		if(Input.GetKeyDown(KeyCode.Alpha7))
+		if(false && Input.GetKeyDown(KeyCode.Alpha7))
 			moveScaleMultiplier -= SpeedRotationIncrement;
-		else if (Input.GetKeyDown(KeyCode.Alpha8))
+		else if (false && Input.GetKeyDown(KeyCode.Alpha8))
 			moveScaleMultiplier += SpeedRotationIncrement;		
 		PlayerController.SetMoveScaleMultiplier(moveScaleMultiplier);
 		
 		float rotationScaleMultiplier = 0.0f;
 		PlayerController.GetRotationScaleMultiplier(ref rotationScaleMultiplier);
-		if(Input.GetKeyDown(KeyCode.Alpha9))
+		if(false && Input.GetKeyDown(KeyCode.Alpha9))
 			rotationScaleMultiplier -= SpeedRotationIncrement;
-		else if (Input.GetKeyDown(KeyCode.Alpha0))
+		else if (false && Input.GetKeyDown(KeyCode.Alpha0))
 			rotationScaleMultiplier += SpeedRotationIncrement;	
 		PlayerController.SetRotationScaleMultiplier(rotationScaleMultiplier);
 		
@@ -532,7 +532,7 @@ public class OVRMainMenu : MonoBehaviour
 		
 		if((Scenes.Length != 0) && 
 		   ((OVRGamepadController.GPC_GetButton((int)OVRGamepadController.Button.A) == true) ||
-			 Input.GetKeyDown(KeyCode.Return)))
+			 (false && Input.GetKeyDown(KeyCode.Return))))
 		{
 			LoadingLevel = true;
 			Application.LoadLevelAsync(Scenes[CurrentLevel]);
@@ -553,7 +553,7 @@ public class OVRMainMenu : MonoBehaviour
 			curStartDown = true;
 		
 		if((PrevStartDown == false) && (curStartDown == true) ||
-			Input.GetKeyDown(KeyCode.RightShift) )
+			(false && Input.GetKeyDown(KeyCode.RightShift)) )
 		{
 			if(ScenesVisible == true) 
 				ScenesVisible = false;
@@ -578,12 +578,12 @@ public class OVRMainMenu : MonoBehaviour
 			curHatUp = true;
 		
 		if((PrevHatDown == false) && (curHatDown == true) ||
-			Input.GetKeyDown(KeyCode.DownArrow))
+			(false && Input.GetKeyDown(KeyCode.DownArrow)))
 		{
 			CurrentLevel = (CurrentLevel + 1) % SceneNames.Length;	
 		}
 		else if((PrevHatUp == false) && (curHatUp == true) ||
-			Input.GetKeyDown(KeyCode.UpArrow))
+			(false && Input.GetKeyDown(KeyCode.UpArrow)))
 		{
 			CurrentLevel--;	
 			if(CurrentLevel < 0)
@@ -673,7 +673,7 @@ public class OVRMainMenu : MonoBehaviour
 		}
 		
 		//GuiHelper.StereoDrawTexture(0.45f, 0.45f, 0.1f, 0.1f, ref TestImage, Color.white);
-		Crosshair.OnGUICrosshair();
+		//Crosshair.OnGUICrosshair();
 		
 		// Restore active render texture
 		RenderTexture.active = previousActive;
@@ -795,11 +795,11 @@ public class OVRMainMenu : MonoBehaviour
 	void UpdateHandleSnapshots()
 	{
 		// Default shapshot
-		if(Input.GetKeyDown(KeyCode.F2))
+		if(false && Input.GetKeyDown(KeyCode.F2))
 			LoadSnapshot ("DEFAULT");
 		
 		// Snapshot 1
-		if(Input.GetKeyDown(KeyCode.F3))
+		if(false && Input.GetKeyDown(KeyCode.F3))
 		{	
 			if(Input.GetKey(KeyCode.Tab))
 				StoreSnapshot ("SNAPSHOT1");
@@ -808,7 +808,7 @@ public class OVRMainMenu : MonoBehaviour
 		}
 		
 		// Snapshot 2
-		if(Input.GetKeyDown(KeyCode.F4))
+		if(false && Input.GetKeyDown(KeyCode.F4))
 		{	
 			if(Input.GetKey(KeyCode.Tab))
 				StoreSnapshot ("SNAPSHOT2");
@@ -817,7 +817,7 @@ public class OVRMainMenu : MonoBehaviour
 		}
 		
 		// Snapshot 3
-		if(Input.GetKeyDown(KeyCode.F5))
+		if(false && Input.GetKeyDown(KeyCode.F5))
 		{	
 			if(Input.GetKey(KeyCode.Tab))
 				StoreSnapshot ("SNAPSHOT3");
@@ -1036,7 +1036,7 @@ public class OVRMainMenu : MonoBehaviour
 	{
 		if( ((ScenesVisible == false) && 
 			 (OVRGamepadController.GPC_GetButton((int)OVRGamepadController.Button.Down) == true)) ||
-			(Input.GetKeyDown(KeyCode.B) == true) )
+			(false && Input.GetKeyDown(KeyCode.B) == true) )
 		{
 			OVRDevice.ResetOrientation(0);
 		}

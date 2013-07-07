@@ -106,7 +106,7 @@ public class HeadMovementControl : MonoBehaviour {
 		} else if ((Time.time - timeOfLastDownPitch) > Mathf.Min((1.0f / frequencyOfHeadDownPitches) * 0.1f, 1.5f) &&
 				   (Time.time - timeOfLastUpPitch) > Mathf.Min((1.0f / frequencyOfHeadUpPitches) * 0.1f, 1.5f)) {
 			frequencyOfHeadPitches -= Time.deltaTime * HeadPitchFrequencyFalloffRate;
-			if (frequencyOfHeadPitches > 1.5f && !audio.isPlaying && !playingPantSound && Random.value < 0.333f) {
+			if (frequencyOfHeadPitches > 1.5f && !audio.isPlaying && !playingPantSound && Random.value < 0.2f) {
 				playingPantSound = true;
 				float randomPant = Random.value;
 				

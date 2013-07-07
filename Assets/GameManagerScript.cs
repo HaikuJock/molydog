@@ -149,7 +149,7 @@ public class GameManagerScript : MonoBehaviour {
 		GameObject hudObject = GameObject.FindGameObjectWithTag("Player");
 		HUDScript hudScript = hudObject.GetComponent<HUDScript>();
 		
-		int startY = 200;
+		int startY = 290;
 		int yIncrement = 30;
 		hudScript.AddGameOverMessage(490, startY, 300, 23, ref gameOverMessage0, Color.yellow);
 		startY += yIncrement;

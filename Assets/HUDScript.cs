@@ -347,7 +347,7 @@ public class HUDScript : MonoBehaviour {
 		GuiHelper.SetFontReplace(FontReplace);
 		
 		if (timeMessage != null) {
-			GuiHelper.StereoBox (700, 140, 40, 23, ref timeMessage, Color.red);
+			GuiHelper.StereoBox (760, 265, 40, 23, ref timeMessage, Color.red);
 		}
 		if (gameOverMessages.Count > 0) {
 			foreach (GameOverHUDMessage hudMess in gameOverMessages) {
@@ -355,7 +355,7 @@ public class HUDScript : MonoBehaviour {
 			}
 		} else {
 			if (topLeftMessage != null) {
-				GuiHelper.StereoBox (440, 140, 300, 40, ref topLeftMessage, Color.yellow);
+				GuiHelper.StereoBox (400, 265, 300, 23, ref topLeftMessage, Color.yellow);
 			}
 			if (IsMessageShowing()) {
 				float alpha = 1.0f;

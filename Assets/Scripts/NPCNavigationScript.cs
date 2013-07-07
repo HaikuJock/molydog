@@ -18,6 +18,8 @@ public class NPCNavigationScript : MonoBehaviour {
 	public Transform player;
 	
 	public AudioClip angrySound;
+	public float stateTransitionTime=2.0f;
+	public float rotationSpeed=0.5f;
 	
 	void Start () {
 		if (navigationState==NPCNavigationState.Walk){
@@ -81,10 +83,22 @@ public class NPCNavigationScript : MonoBehaviour {
 	{
 		//agent.destination=player.position;
 		agent.enabled=false;
-		transform.LookAt(player.transform.position);
+		
+		//transform.LookAt(player.transform.position*Time.deltaTime*turnSpeed);
+       Vector3 direction = (player.transform.position - transform.position).normalized;
+       Quaternion lookRotation = Quaternion.LookRotation(direction);
+       transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);		
 		
 		//transition back to walk state after a bit
+		StartCoroutine("SwitchToWalk");
 		
+	}
+	
+	IEnumerator SwitchToWalk()
+	{
+		yield return new WaitForSeconds(stateTransitionTime);
+		agent.enabled=true;
+		SwitchNavState(NPCNavigationState.Walk);
 	}
 	
 	public void SwitchNavState(NPCNavigationState newState)
@@ -95,12 +109,12 @@ public class NPCNavigationScript : MonoBehaviour {
 			if (navigationState!=NPCNavigationState.TrackPlayer)
 			{
 				//TODO: Find why we can't access the dog script 
-				//DogScript dogScript=player.GetComponent<DogScript>();
-				//dogScript.currentObserverCount++;		
+				DogScript dogScript=player.GetComponent<DogScript>();
+				dogScript.currentObserverCount++;		
 			}
 			audio.Stop();
 			MoveToPlayer();
-			audio.PlayOneShot(angrySound);
+			//audio.PlayOneShot(angrySound);
 		}
 		else if (newState==NPCNavigationState.Walk)
 		{

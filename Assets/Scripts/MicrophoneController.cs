@@ -22,6 +22,7 @@ public class MicrophoneController : MonoBehaviour {
 	float micRefreshTime=3.0f;
 	float micCurrentTime=0.0f;
 	bool refreshTime=false;
+	bool debug=false;
 	// Use this for initialization
 	void Start () {
 		GameObject tutorialObject = GameObject.FindGameObjectWithTag("Tutorial");
@@ -67,8 +68,10 @@ public class MicrophoneController : MonoBehaviour {
 	void OnGUI()
 	{
 		if (barked){
-		GUI.Label(new Rect(10,10,400,100),string.Format("{0} pitch - {1} freq - {2} loudness - {3}",displayText,
-			pitch, freq,loudness));
+			if (debug){
+			GUI.Label(new Rect(10,10,400,100),string.Format("{0} pitch - {1} freq - {2} loudness - {3}",displayText,
+				pitch, freq,loudness));
+			}
 		}
 	}
 	

@@ -18,7 +18,7 @@ public class DogScript : MonoBehaviour {
 	public AudioClip OhYeahClip;
 	public AudioClip ThreeAngryBarksClip;
 	const float MinAttractionDistance = 20.0f;
-	const float UseageDistance = 3.0f;
+	const float UseageDistance = 4.0f;
 	static float AttractionSpeedFactor = 0.5f;
 	public static float MaxEmbarrassment = 30.0f;
 	public bool embarrass=false;

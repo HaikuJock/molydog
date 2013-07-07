@@ -143,7 +143,7 @@ public class GameManagerScript : MonoBehaviour {
 		string gameOverMessage1 = "Score : " + score + "\n";
 		string gameOverMessage2 = "Head-bob count : " + headBobCount.ToString() + "\n";
 		string gameOverMessage3 = "Bark count : " + barkCount.ToString() + "\n";
-		string gameOverMessage4 = "Urine : " + litresOfUrine.ToString("G1") + "l\n";
+		string gameOverMessage4 = "Urine : " + litresOfUrine.ToString("G3") + "l\n";
 		//gameOverMessage += "Head-bob count : " + headBobCount.ToString() + "\n";
 		//gameOverMessage += "Head-bob count : " + headBobCount.ToString() + "\n";
 		GameObject hudObject = GameObject.FindGameObjectWithTag("Player");

@@ -347,7 +347,7 @@ public class HUDScript : MonoBehaviour {
 		GuiHelper.SetFontReplace(FontReplace);
 		
 		if (timeMessage != null) {
-			GuiHelper.StereoBox (760, 265, 40, 23, ref timeMessage, Color.red);
+			GuiHelper.StereoBox (745, 265, 40, 23, ref timeMessage, Color.red);
 		}
 		if (gameOverMessages.Count > 0) {
 			foreach (GameOverHUDMessage hudMess in gameOverMessages) {

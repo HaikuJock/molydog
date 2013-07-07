@@ -61,7 +61,7 @@ public class HeadMovementControl : MonoBehaviour {
 			pee=true;
 			peeingLeft = true;
 		}
-		if (Input.GetKeyDown(KeyCode.LeftShift))
+		if (false && Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			HeadRunSpeed=MaxHeadRunSpeed;
 		}
@@ -131,6 +131,13 @@ public class HeadMovementControl : MonoBehaviour {
 		//Debug.Log("HeadRunSpeed : " + HeadRunSpeed.ToString("G4"));
 		//Debug.Log("frequencyOfHeadPitches : " + frequencyOfHeadPitches.ToString("G4"));
 		previousPitch = pitch;
+	}
+	
+	public void PlayerStopped() {
+		frequencyOfHeadPitches = 1.0f / HeadPitchFrequencyToSpeedFactor;
+		frequencyOfHeadDownPitches = frequencyOfHeadPitches;
+		frequencyOfHeadUpPitches = frequencyOfHeadPitches;
+		HeadRunSpeed = 1.0f;
 	}
 	
 	bool IsHeadPitchedUp(float prevP, float p) {

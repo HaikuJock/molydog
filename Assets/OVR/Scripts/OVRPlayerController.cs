@@ -225,8 +225,12 @@ public class OVRPlayerController : OVRComponent
 		if (Input.GetKey(KeyCode.DownArrow))  moveBack 	  = true; 
 		if (Input.GetKey(KeyCode.RightArrow)) moveRight   = true; 
 		
+		HeadMovementControl headControl = gameObject.transform.FindChild("OVRCameraController").GetComponent<HeadMovementControl>();
+		
 		if (moveForward || moveBack || moveLeft || moveRight) {
 			tutorial.DidMove();
+		} else {
+			headControl.PlayerStopped();
 		}
 		
 		if ( (moveForward && moveLeft) || (moveForward && moveRight) ||
@@ -241,8 +245,6 @@ public class OVRPlayerController : OVRComponent
 			
 		// Compute this for key movement
 		float moveInfluence = Acceleration * 0.1f * MoveScale * MoveScaleMultiplier;
-		
-		HeadMovementControl headControl = gameObject.transform.FindChild("OVRCameraController").GetComponent<HeadMovementControl>();
 		
 		if (headControl.HeadRunSpeed > 1.0f) {
 			moveInfluence *= headControl.HeadRunSpeed;

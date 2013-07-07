@@ -673,7 +673,7 @@ public class OVRMainMenu : MonoBehaviour
 		}
 		
 		//GuiHelper.StereoDrawTexture(0.45f, 0.45f, 0.1f, 0.1f, ref TestImage, Color.white);
-		//Crosshair.OnGUICrosshair();
+		Crosshair.OnGUICrosshair();
 		
 		// Restore active render texture
 		RenderTexture.active = previousActive;

@@ -30,12 +30,13 @@ public class DogScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		embarrass=micController.barked || headController.pee;
+		//embarrass=micController.barked || headController.pee;
+		
 		//if we have done the action required then up embarrassment for mic ones(just bark at the mo)
-		if (embarrass)
-		{
-			Debug.Log("embarrass");
-		}		
+		//if (embarrass)
+		//{
+		//	Debug.Log("embarrass");
+		//}		
 		UpdateAttractionToEmbarrassmentPoints();
 	}
 	
@@ -93,6 +94,14 @@ public class DogScript : MonoBehaviour {
 	
 	void UseEmbarrassmentPoint(PointOfEmbarrassmentScript ptOfEmbarrassmentScript) {
 		
+		if (ptOfEmbarrassmentScript.playerActions==PointOfEmbarrassmentScript.PlayerActions.bark && micController.barked)
+		{
+			embarrass=true;
+		}
+		else if (ptOfEmbarrassmentScript.playerActions==PointOfEmbarrassmentScript.PlayerActions.pee && headController.pee)
+		{
+			embarrass=true;
+		}
 		
 		GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
 		

@@ -10,7 +10,8 @@ public class PointOfEmbarrassmentScript : MonoBehaviour {
 		sniff,
 		pee
 	};
-	private OVRGUI  		GuiHelper 		 = new OVRGUI();
+	
+	public HUDScript hudScript;
 	public float AttractionLevel = 0.0f;
 	public float EmbarrassmentLevel = 0.0f;
 	public float ObservedEmbarrassmentFactor = 0.0f;
@@ -49,25 +50,13 @@ public class PointOfEmbarrassmentScript : MonoBehaviour {
 		{
 			showHelperText=true;
 			DogScript dogScript=c.gameObject.GetComponent<DogScript>();
+			hudScript=c.gameObject.GetComponent<HUDScript>();
+			hudScript.ShowMessage(helperText,2.0f);
 			//Use(dogScript);
 		}
 	}
 	
 	void OnTriggerExit(Collider c)
 	{
-		if (c.tag=="Player")
-		{
-			//stop displaying message
-			showHelperText=false;
-		}
-	}
-	
-	void OnGUI()
-	{
-		if (showHelperText)
-		{
-			
-			GuiHelper.StereoBox(40, 40, 300, 40, ref helperText, Color.yellow);
-		}
 	}
 }

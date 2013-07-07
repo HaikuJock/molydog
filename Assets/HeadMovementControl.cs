@@ -115,14 +115,14 @@ public class HeadMovementControl : MonoBehaviour {
 		}
 		
 		if (peeingLeft) {
-			gameManager.AddLitresOfUrine(Time.deltaTime * 0.8f);
+			gameManager.AddLitresOfUrine(Time.deltaTime * 1.5f);
 			if (!IsTiltingLeft() ||
 				peeingDuration > MaxPeeDuration) {
 				peeingLeft = false;
 				FadePeeSoundToStop();
 			}
 		} else if (peeingRight) {
-			gameManager.AddLitresOfUrine(Time.deltaTime * 0.8f);
+			gameManager.AddLitresOfUrine(Time.deltaTime * 1.5f);
 			if (!IsTiltingRight() ||
 				peeingDuration > MaxPeeDuration) {
 				peeingRight = false;

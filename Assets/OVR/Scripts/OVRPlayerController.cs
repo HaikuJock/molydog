@@ -37,6 +37,8 @@ using System.Collections.Generic;
 //
 public class OVRPlayerController : OVRComponent
 {
+	TutorialManagerScript tutorial;
+
 	protected CharacterController 	Controller 		 = null;
 	protected OVRCameraController 	CameraController = null;
 
@@ -119,6 +121,8 @@ public class OVRPlayerController : OVRComponent
 	new public virtual void Start()
 	{
 		base.Start();
+		GameObject tutorialObject = GameObject.FindGameObjectWithTag("Tutorial");
+		tutorial = tutorialObject.GetComponent<TutorialManagerScript>();
 		
 		InitializeInputs();	
 		SetCameras();
@@ -220,7 +224,11 @@ public class OVRPlayerController : OVRComponent
 		if (Input.GetKey(KeyCode.LeftArrow))  moveLeft 	  = true;
 		if (Input.GetKey(KeyCode.DownArrow))  moveBack 	  = true; 
 		if (Input.GetKey(KeyCode.RightArrow)) moveRight   = true; 
-			
+		
+		if (moveForward || moveBack || moveLeft || moveRight) {
+			tutorial.DidMove();
+		}
+		
 		if ( (moveForward && moveLeft) || (moveForward && moveRight) ||
 			 (moveBack && moveLeft)    || (moveBack && moveRight) )
 			MoveScale = 0.70710678f;

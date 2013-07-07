@@ -5,6 +5,8 @@ using System.Collections;
 public class HeadMovementControl : MonoBehaviour {
 	public OVRCameraController camControl;
 	
+	TutorialManagerScript tutorial;
+	GameManagerScript gameManager;
 	// Peeing
 	public AudioClip PeeClip1;
 	public AudioClip PeeClip2;
@@ -36,17 +38,21 @@ public class HeadMovementControl : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-	
+		GameObject tutorialObject = GameObject.FindGameObjectWithTag("Tutorial");
+		GameObject managerObject = GameObject.FindGameObjectWithTag("GameController");
+		
+		tutorial = tutorialObject.GetComponent<TutorialManagerScript>();
+		gameManager = managerObject.GetComponent<GameManagerScript>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (false && Input.GetKeyDown(KeyCode.P))
+		if (Input.GetKeyDown(KeyCode.P))
 		{
 			StartPeeSound();
 			pee=true;
 		}
-		if (false && Input.GetKeyDown(KeyCode.LeftShift))
+		if (Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			HeadRunSpeed=MaxHeadRunSpeed;
 		}
@@ -69,6 +75,8 @@ public class HeadMovementControl : MonoBehaviour {
 				frequencyOfHeadUpPitches = 1.0f / timeBetweenUpPitches;
 				frequencyOfHeadPitches = Mathf.Max(frequencyOfHeadUpPitches, frequencyOfHeadDownPitches);
 				//Debug.Log("Up");
+				gameManager.IncrementHeadBobCount();
+				tutorial.DidRun();
 			}
 			timeOfLastUpPitch = Time.time;
 		} else if (IsHeadPitchedDown(previousPitch, pitch)) {
@@ -78,6 +86,8 @@ public class HeadMovementControl : MonoBehaviour {
 				frequencyOfHeadDownPitches = 1.0f / timeBetweenDownPitches;
 				frequencyOfHeadPitches = Mathf.Max(frequencyOfHeadUpPitches, frequencyOfHeadDownPitches);
 				//Debug.Log("Down");
+				gameManager.IncrementHeadBobCount();
+				tutorial.DidRun();
 			}
 			timeOfLastDownPitch = Time.time;
 		} else if ((Time.time - timeOfLastDownPitch) > 1.0f / frequencyOfHeadDownPitches &&
@@ -91,7 +101,7 @@ public class HeadMovementControl : MonoBehaviour {
 	}
 	
 	bool IsHeadPitchedUp(float prevP, float p) {
-		return (prevP > PitchMagnitudeUp || prevP < 180.0f) && (p <= PitchMagnitudeUp && p > 180.0f);
+		return ((prevP > PitchMagnitudeUp || prevP < 180.0f) && (p <= PitchMagnitudeUp && p > 180.0f)) || Input.GetKeyDown(KeyCode.I);
 	}
 	
 	bool IsHeadPitchedDown(float prevP, float p) {
@@ -104,12 +114,14 @@ public class HeadMovementControl : MonoBehaviour {
 		}
 		
 		if (peeingLeft) {
+			gameManager.AddLitresOfUrine(Time.deltaTime * 0.2f);
 			if (!IsTiltingLeft() ||
 				peeingDuration > MaxPeeDuration) {
 				peeingLeft = false;
 				FadePeeSoundToStop();
 			}
 		} else if (peeingRight) {
+			gameManager.AddLitresOfUrine(Time.deltaTime * 0.2f);
 			if (!IsTiltingRight() ||
 				peeingDuration > MaxPeeDuration) {
 				peeingRight = false;
@@ -125,7 +137,6 @@ public class HeadMovementControl : MonoBehaviour {
 			}
 		} else {
 			FadePeeSoundToStop();
-			
 		}
 	}
 	
@@ -142,6 +153,7 @@ public class HeadMovementControl : MonoBehaviour {
 	}
 	
 	void StartPeeSound() {
+		tutorial.DidPee();
 		pee=true;
 		if (Random.value < 0.5) {
 			audio.clip = PeeClip1;

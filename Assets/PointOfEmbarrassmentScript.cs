@@ -10,6 +10,7 @@ public class PointOfEmbarrassmentScript : MonoBehaviour {
 		sniff,
 		pee
 	};
+	GameManagerScript gameManager;
 	public float AttractionLevel = 0.0f;
 	public float EmbarrassmentLevel = 0.0f;
 	public float ObservedEmbarrassmentFactor = 0.0f;
@@ -27,11 +28,15 @@ public class PointOfEmbarrassmentScript : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-	
+		GameObject managerObject = GameObject.FindGameObjectWithTag("GameController");
+		
+		gameManager = managerObject.GetComponent<GameManagerScript>();
+
 	}
 	
 	public void Use(DogScript dogScript) {
 		dogScript.currentEmbarrassment += EmbarrassmentLevel * (1.0f + (float)dogScript.currentObserverCount);
+		gameManager.SetMinimumEmbarrassment(dogScript.currentEmbarrassment);
 		UsedTimer = ReUseTime;
 	}
 	
@@ -47,7 +52,7 @@ public class PointOfEmbarrassmentScript : MonoBehaviour {
 		if (c.tag=="Player")
 		{
 			showHelperText=true;
-			DogScript dogScript=c.gameObject.GetComponent<DogScript>();
+			//DogScript dogScript=c.gameObject.GetComponent<DogScript>();
 			//Use(dogScript);
 		}
 	}

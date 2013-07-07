@@ -89,7 +89,7 @@ public class HUDScript : MonoBehaviour {
 		if (newPortion > displayedEmbarrassmentPortion) {
 			ShowMessage("Owner Embarrassment Increased :-)", 4.9f);
 		} else if (newPortion < displayedEmbarrassmentPortion) {
-			ShowMessage("Owner Embarrassment Increased :-)", 4.9f);
+			ShowMessage("Owner Embarrassment Decreased :-(", 4.9f);
 		}
 		
 		if (IsMeterFadingIn()) {
@@ -144,15 +144,6 @@ public class HUDScript : MonoBehaviour {
 			Debug.LogWarning("OVRMainMenu: More then 1 OVRCameraController attached.");
 		else
 			CameraController = CameraControllers[0];
-		
-		EnqueueMessage("Use W, A, S, D to move", 5.0f);
-		EnqueueMessage("Bob your head up and down to run", 3.0f);
-		EnqueueMessage("Tilt your head to pee", 3.0f);
-		EnqueueMessage("To bark, just bark...", 3.0f);
-		EnqueueMessage("...that's right, Bark!", 3.0f);
-		EnqueueMessage("Embarrass your owner before the end of your walk.", 3.0f);
-		EnqueueMessage("A green fringe indicates you are being observed.", 3.0f);
-		EnqueueMessage("-It's more embarrassing when you are mischievous!", 3.0f);
 	}
 	
 	public void EnqueueMessage(string messageToEnqueue, float duration) {

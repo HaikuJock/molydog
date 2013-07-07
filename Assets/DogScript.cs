@@ -6,7 +6,7 @@ public class DogScript : MonoBehaviour {
 	public OVRPlayerController PlayerController;
 	public MicrophoneController micController;
 	public HeadMovementControl headController;
-	
+	GameManagerScript gameManager;
 	public float currentEmbarrassment;
 	public int currentObserverCount;
 	public AudioClip WuffClip;
@@ -25,7 +25,10 @@ public class DogScript : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-	
+		GameObject managerObject = GameObject.FindGameObjectWithTag("GameController");
+		
+		gameManager = managerObject.GetComponent<GameManagerScript>();
+
 	}
 	
 	// Update is called once per frame
@@ -108,8 +111,10 @@ public class DogScript : MonoBehaviour {
 		HUDScript hudScript = playerObject.GetComponent<HUDScript>();
 		float embarrassmentPortion = currentEmbarrassment / MaxEmbarrassment;
 		if (embarrass){
-			ptOfEmbarrassmentScript.Use(this);
-			hudScript.SetEmbarrassmentPortion(currentEmbarrassment / MaxEmbarrassment);
+			if (gameManager.HasGameStarted()) {
+				ptOfEmbarrassmentScript.Use(this);
+				hudScript.SetEmbarrassmentPortion(currentEmbarrassment / MaxEmbarrassment);
+			}
 		
 			if (embarrassmentPortion >= 1.0f) {
 				audio.PlayOneShot(OhYeahClip, Random.RandomRange(0.8f, 1.0f));

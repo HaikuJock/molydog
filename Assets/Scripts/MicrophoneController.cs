@@ -12,6 +12,9 @@ public class MicrophoneController : MonoBehaviour {
 	public bool pant=false;
 	string displayText="";
 	
+	TutorialManagerScript tutorial;
+	GameManagerScript gameManager;
+
 	float pitch=0.0f;
 	float freq=0.0f;
 	float loudness=0.0f;
@@ -21,7 +24,11 @@ public class MicrophoneController : MonoBehaviour {
 	bool refreshTime=false;
 	// Use this for initialization
 	void Start () {
-	
+		GameObject tutorialObject = GameObject.FindGameObjectWithTag("Tutorial");
+		GameObject managerObject = GameObject.FindGameObjectWithTag("GameController");
+		
+		tutorial = tutorialObject.GetComponent<TutorialManagerScript>();
+		gameManager = managerObject.GetComponent<GameManagerScript>();
 	}
 	
 	void ResetRefreshTimer()
@@ -67,6 +74,9 @@ public class MicrophoneController : MonoBehaviour {
 	
 	void DoBark()
 	{
+		gameManager.IncrementBarkCount();
+		tutorial.DidBark();
+
 		barked=true;
 		displayText="Bark";
 	}

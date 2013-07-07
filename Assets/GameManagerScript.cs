@@ -9,6 +9,7 @@ public class GameManagerScript : MonoBehaviour {
 	private float gameTimer;
 	private bool gameOver;
 	private bool showGameTimer;
+	private bool started;
 	
 	const float FadeDuration = 0.3f;
 	const float GameDuration = 180.0f;
@@ -23,9 +24,13 @@ public class GameManagerScript : MonoBehaviour {
 		gameOver = false;
 	}
 	
+	public void StartGame() {
+		started = true;
+	}
+	
 	// Update is called once per frame
 	void Update () {
-		if (gameOver) {
+		if (!started || gameOver) {
 			return;
 		}
 		if (false && Input.GetKeyDown(KeyCode.U) == true) {
@@ -48,28 +53,28 @@ public class GameManagerScript : MonoBehaviour {
 	}
 	
 	public void IncrementHeadBobCount() {
-		if (gameOver) {
+		if (!started || gameOver) {
 			return;
 		}
 		++headBobCount;
 	}
 	
 	public void IncrementBarkCount() {
-		if (gameOver) {
+		if (!started || gameOver) {
 			return;
 		}
 		++barkCount;
 	}
 	
 	public void AddLitresOfUrine(float litres) {
-		if (gameOver) {
+		if (!started || gameOver) {
 			return;
 		}
 		litresOfUrine += litres;
 	}
 	
 	public void SetMinimumEmbarrassment(float minEmbarrassment) {
-		if (gameOver) {
+		if (!started || gameOver) {
 			return;
 		}
 		embarrassment = Mathf.Max (embarrassment, minEmbarrassment);
@@ -80,6 +85,10 @@ public class GameManagerScript : MonoBehaviour {
 	
 	public bool IsGameOver() {
 		return gameOver;
+	}
+	
+	public bool HasGameStarted() {
+		return started;
 	}
 	
 	private void OnGameOver() {

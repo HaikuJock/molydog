@@ -6,13 +6,15 @@ public class TutorialManagerScript : MonoBehaviour {
 	HUDScript hudScript;
 	GameManagerScript gameManager;
 	public bool HasMoved;
+	public bool HasMouseRotated;
 	public bool HasRun;
 	public bool HasPeed;
 	public bool HasBarked;
 	public bool HasBarkedTwice;
-	private float barkAgainTime;
+	private float timer;
 	
 	private bool showingHasMoved;
+	private bool showingHasMouseRotated;
 	private bool showingHasRun;
 	private bool showingHasPeed;
 	private bool showingHasBarked;
@@ -33,32 +35,45 @@ public class TutorialManagerScript : MonoBehaviour {
 		if (finished) {
 			return;
 		}
+		const float minTime = 4.0f;
+		timer += Time.deltaTime;
 		if (!HasMoved) {
 			if (!showingHasMoved) {
 				hudScript.ShowMessage("Use W, A, S, D to move", 180.0f);
 				showingHasMoved = true;
+				timer = 0.0f;
+			}
+		} else if (!HasMouseRotated) {
+			if (!showingHasMouseRotated && timer > minTime) {
+				hudScript.ShowMessage("Use the mouse to assist turning", 180.0f);
+				showingHasMouseRotated = true;
+				timer = 0.0f;
 			}
 		} else if (!HasRun) {
-			if (!showingHasRun) {
+			if (!showingHasRun && timer > minTime) {
 				hudScript.ShowMessage("Bob your head up and down to run", 180.0f);
 				showingHasRun = true;
+				timer = 0.0f;
 			}
 		} else if (!HasPeed) {
-			if (!showingHasPeed) {
+			if (!showingHasPeed && timer > minTime) {
 				hudScript.ShowMessage("Tilt your head to pee", 180.0f);
 				showingHasPeed = true;
+				timer = 0.0f;
 			}
 		} else if (!HasBarked) {
-			if (!showingHasBarked) {
+			if (!showingHasBarked && timer > minTime) {
 				hudScript.ShowMessage("To bark, just bark...", 180.0f);
 				showingHasBarked = true;
+				timer = 0.0f;
 			}
 		} else if (!HasBarkedTwice) {
-			if (!showingHasBarkedTwice) {
+			if (!showingHasBarkedTwice && timer > minTime) {
 				hudScript.ShowMessage("...that's right, Bark!", 180.0f);
 				showingHasBarkedTwice = true;
+				timer = 0.0f;
 			}
-		} else {
+		} else if (timer > minTime) {
 			hudScript.ShowMessage(null, 0.0f);
 			hudScript.EnqueueMessage("Embarrass your owner before the end of your walk.", 3.3f);
 			hudScript.EnqueueMessage("A green fringe indicates you are being observed.", 3.3f);
@@ -69,19 +84,36 @@ public class TutorialManagerScript : MonoBehaviour {
 		}
 	}
 	
-	public void DidMove() { HasMoved = true; }
+	public void DidMove() {
+		if (showingHasMoved) {
+			HasMoved = true;
+		}
+	}
 	
-	public void DidRun() { HasRun = true; }
+	public void DidMouseRotate() {
+		if (showingHasMouseRotated) {
+			HasMouseRotated = true;
+		}
+	}
 	
-	public void DidPee() { HasPeed = true; }
+	public void DidRun() {
+		if (showingHasRun) {
+			HasRun = true;
+		}
+	}
+	
+	public void DidPee() {
+		if (showingHasPeed) {
+			HasPeed = true;
+		}
+	}
 	
 	public void DidBark() { 
-		if (HasBarked && Time.time > barkAgainTime) {
+		if (HasBarked && showingHasBarkedTwice) {
 			HasBarkedTwice = true;
 		}
-		if (!HasBarked) {
-			barkAgainTime = Time.time + 0.5f;
+		if (showingHasBarked) {
+			HasBarked = true;
 		}
-		HasBarked = true;
 	}
 }

@@ -22,10 +22,12 @@ public class GameManagerScript : MonoBehaviour {
 		litresOfUrine = 0.0f;
 		gameTimer = 0.0f;
 		gameOver = false;
+		started = false;
 	}
 	
 	public void StartGame() {
 		started = true;
+		gameTimer = 0.0f;
 	}
 	
 	// Update is called once per frame
@@ -93,6 +95,7 @@ public class GameManagerScript : MonoBehaviour {
 	
 	private void OnGameOver() {
 		gameOver = true;
+		ShowGameOverMessages();
 	}
 	
 	void OnGUI()
@@ -114,9 +117,6 @@ public class GameManagerScript : MonoBehaviour {
 			
 			hudScript.ShowTimeMessage(timeRemainingString);
 			//GuiHelper.StereoBox(800, 40, 64, 64, ref timeRemainingString, Color.yellow);
-		}
-		if (gameOver) {
-			ShowGameOverMessages();
 		}
 	}
 	

@@ -51,6 +51,7 @@ public class HeadMovementControl : MonoBehaviour {
 		{
 			StartPeeSound();
 			pee=true;
+			peeingLeft = true;
 		}
 		if (Input.GetKeyDown(KeyCode.LeftShift))
 		{
@@ -90,8 +91,8 @@ public class HeadMovementControl : MonoBehaviour {
 				tutorial.DidRun();
 			}
 			timeOfLastDownPitch = Time.time;
-		} else if ((Time.time - timeOfLastDownPitch) > 1.0f / frequencyOfHeadDownPitches &&
-				   (Time.time - timeOfLastUpPitch) > 1.0f / frequencyOfHeadUpPitches) {
+		} else if ((Time.time - timeOfLastDownPitch) > Mathf.Min((1.0f / frequencyOfHeadDownPitches) * 0.1f, 1.5f) &&
+				   (Time.time - timeOfLastUpPitch) > Mathf.Min((1.0f / frequencyOfHeadUpPitches) * 0.1f, 1.5f)) {
 			frequencyOfHeadPitches -= Time.deltaTime * HeadPitchFrequencyFalloffRate;
 		}
 		HeadRunSpeed = Mathf.Min(HeadPitchFrequencyToSpeedFactor * frequencyOfHeadPitches, MaxHeadRunSpeed);
@@ -114,14 +115,14 @@ public class HeadMovementControl : MonoBehaviour {
 		}
 		
 		if (peeingLeft) {
-			gameManager.AddLitresOfUrine(Time.deltaTime * 0.2f);
+			gameManager.AddLitresOfUrine(Time.deltaTime * 0.8f);
 			if (!IsTiltingLeft() ||
 				peeingDuration > MaxPeeDuration) {
 				peeingLeft = false;
 				FadePeeSoundToStop();
 			}
 		} else if (peeingRight) {
-			gameManager.AddLitresOfUrine(Time.deltaTime * 0.2f);
+			gameManager.AddLitresOfUrine(Time.deltaTime * 0.8f);
 			if (!IsTiltingRight() ||
 				peeingDuration > MaxPeeDuration) {
 				peeingRight = false;

@@ -49,7 +49,7 @@ public class PointOfEmbarrassmentScript : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider c)
 	{
-		if (c.tag=="Player")
+		if (c.tag=="Player" && UsedTimer <= 0.0f)
 		{
 			showHelperText=true;
 			//DogScript dogScript=c.gameObject.GetComponent<DogScript>();

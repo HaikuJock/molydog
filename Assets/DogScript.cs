@@ -47,15 +47,15 @@ public class DogScript : MonoBehaviour {
 		if (audio.isPlaying) {
 			return;
 		}
-		audio.PlayOneShot(ThreeAngryBarksClip, Random.RandomRange(0.8f, 1.0f));
+		audio.PlayOneShot(ThreeAngryBarksClip, Random.Range(0.8f, 1.0f));
 	}
 	
 	void PlayHappyNoise() {
 		if (audio.isPlaying) {
 			return;
 		}
-		float randomNoise = Random.RandomRange(0.0f, 1.0f);
-		float randomVolume = Random.RandomRange(0.8f, 1.0f);
+		float randomNoise = Random.Range(0.0f, 1.0f);
+		float randomVolume = Random.Range(0.8f, 1.0f);
 		float embarrassmentPortion = currentEmbarrassment / MaxEmbarrassment;
 		
 		if (embarrassmentPortion < 0.5f) {
@@ -117,7 +117,7 @@ public class DogScript : MonoBehaviour {
 			}
 		
 			if (embarrassmentPortion >= 1.0f) {
-				audio.PlayOneShot(OhYeahClip, Random.RandomRange(0.8f, 1.0f));
+				audio.PlayOneShot(OhYeahClip, Random.Range(0.8f, 1.0f));
 			} else {
 				PlayHappyNoise();
 				embarrass=false;

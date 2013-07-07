@@ -14,6 +14,24 @@ public class HUDScript : MonoBehaviour {
 		}
 	};
 	
+	class GameOverHUDMessage {
+		public string message;
+		public int x;
+		public int y;
+		public int w;
+		public int h;
+		public Color clr;
+		
+		public GameOverHUDMessage(string m, int x, int y, int w, int h, Color clr) {
+			message = m;
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
+			this.clr = clr;
+		}
+	};
+	
 	public float 	FadeInTime    		= 2.0f;
 	public Texture 	FadeInTexture 		= null;
 	public Texture 	ObservedStatusTexture = null;
@@ -39,6 +57,11 @@ public class HUDScript : MonoBehaviour {
 	private string message = "";
 	private float messageTimer;
 	private float messageDuration;
+	private List<GameOverHUDMessage> gameOverMessages = new List<GameOverHUDMessage>();
+	private string topLeftMessage;
+	private float topLeftMessageExpireTime;
+	private string timeMessage;
+	private float timeMessageExpireTime;
 	
 	const float MeterFadeDuration = 0.6f;
 	const float MeterShowDuration = 4.3f;
@@ -123,15 +146,27 @@ public class HUDScript : MonoBehaviour {
 			CameraController = CameraControllers[0];
 		
 		EnqueueMessage("Use W, A, S, D to move", 5.0f);
-		EnqueueMessage("Bob your head up and down to run", 4.0f);
-		EnqueueMessage("Tilt your head to pee", 4.0f);
-		EnqueueMessage("To bark, just bark...", 4.0f);
-		EnqueueMessage("...that's right, Bark!", 4.0f);
-		EnqueueMessage("Embarrass your owner before the end of your walk.", 4.0f);
+		EnqueueMessage("Bob your head up and down to run", 3.0f);
+		EnqueueMessage("Tilt your head to pee", 3.0f);
+		EnqueueMessage("To bark, just bark...", 3.0f);
+		EnqueueMessage("...that's right, Bark!", 3.0f);
+		EnqueueMessage("Embarrass your owner before the end of your walk.", 3.0f);
+		EnqueueMessage("A green fringe indicates you are being observed.", 3.0f);
+		EnqueueMessage("-It's more embarrassing when you are mischievous!", 3.0f);
 	}
 	
 	public void EnqueueMessage(string messageToEnqueue, float duration) {
 		messageQueue.Enqueue(new HUDMessage(messageToEnqueue, duration));
+	}
+	
+	public void ShowTopLeftMessage(string messageToShow) {
+		topLeftMessage = messageToShow;
+		topLeftMessageExpireTime = Time.time + 0.5f;
+	}
+	
+	public void ShowTimeMessage(string messageToShow) {
+		timeMessage = messageToShow;
+		timeMessageExpireTime = Time.time + 0.5f;
 	}
 	
 	// Use this for initialization
@@ -221,6 +256,12 @@ public class HUDScript : MonoBehaviour {
 			SetEmbarrassmentPortion(targetEmbarrassmentPortion - 0.1f);
 		}
 		*/
+		if (topLeftMessage != null && Time.time > topLeftMessageExpireTime)  {
+			topLeftMessage = null;
+		}
+		if (timeMessage != null && Time.time > timeMessageExpireTime)  {
+			timeMessage = null;
+		}
 		if (IsMessageShowing()) {
 			messageTimer += Time.deltaTime;
 			if (messageTimer > messageDuration) {
@@ -250,6 +291,10 @@ public class HUDScript : MonoBehaviour {
 	
 	bool IsMessageShowing() {
 		return message != null;
+	}
+	
+	public void AddGameOverMessage(int x, int y, int w, int h, ref string mess, Color clr) {
+		gameOverMessages.Add(new GameOverHUDMessage(mess, x, y, w, h, clr));
 	}
 	
 	void OnGUI()
@@ -310,31 +355,43 @@ public class HUDScript : MonoBehaviour {
 		// is removed from GUI)
 		GuiHelper.SetFontReplace(FontReplace);
 		
-		if (IsMessageShowing()) {
-			float alpha = 1.0f;
-			
-			if (messageTimer < MessageFadeDuration) {
-				alpha = messageTimer / MessageFadeDuration;
-			} else if (messageTimer > (messageDuration - MessageFadeDuration)) {
-				alpha = (messageDuration - messageTimer) /  MessageFadeDuration;
-				alpha = Mathf.Clamp(alpha, 0.0f, 1.0f);
-			}
-			GuiHelper.StereoBox (StartX, StartY, WidthX, WidthY, ref message, Color.yellow * alpha);
+		if (timeMessage != null) {
+			GuiHelper.StereoBox (700, 140, 40, 23, ref timeMessage, Color.red);
 		}
-		if (ObservedStatusTexture != null) {
-			if (detectedByParkKeeperCount > 0) {
-				GuiHelper.StereoDrawTexture(200, 4, 880, 660, ref ObservedStatusTexture, Color.red);
-			} else if (detectedByCivilianCount > 0) {
-				GuiHelper.StereoDrawTexture(200, 4, 880, 660, ref ObservedStatusTexture, Color.green);
+		if (gameOverMessages.Count > 0) {
+			foreach (GameOverHUDMessage hudMess in gameOverMessages) {
+				GuiHelper.StereoBox (hudMess.x, hudMess.y, hudMess.w, hudMess.h, ref hudMess.message, hudMess.clr);
+			}
+		} else {
+			if (topLeftMessage != null) {
+				GuiHelper.StereoBox (440, 140, 300, 40, ref topLeftMessage, Color.yellow);
+			}
+			if (IsMessageShowing()) {
+				float alpha = 1.0f;
+				
+				if (messageTimer < MessageFadeDuration) {
+					alpha = messageTimer / MessageFadeDuration;
+				} else if (messageTimer > (messageDuration - MessageFadeDuration)) {
+					alpha = (messageDuration - messageTimer) /  MessageFadeDuration;
+					alpha = Mathf.Clamp(alpha, 0.0f, 1.0f);
+				}
+				GuiHelper.StereoBox (StartX, StartY, WidthX, WidthY, ref message, Color.yellow * alpha);
+			}
+			if (ObservedStatusTexture != null) {
+				if (detectedByParkKeeperCount > 0) {
+					GuiHelper.StereoDrawTexture(200, 4, 880, 660, ref ObservedStatusTexture, Color.red);
+				} else if (detectedByCivilianCount > 0) {
+					GuiHelper.StereoDrawTexture(200, 4, 880, 660, ref ObservedStatusTexture, Color.green);
+				}
+			}
+			if (IsMeterShowing()) {
+				float MaxWidth = 300.0f;
+				float width = MaxWidth * displayedEmbarrassmentPortion;
+				GuiHelper.StereoDrawTexture(490, 400, (int)width, 64, ref EmbarrassmentMeterTexture, Color.white * MeterAlpha());
+				GuiHelper.StereoDrawTexture(490, 400, (int)MaxWidth, 64, ref EmbarrassmentMeterBorderTexture, Color.white * MeterAlpha());
 			}
 		}
 		
-		if (IsMeterShowing()) {
-			float MaxWidth = 300.0f;
-			float width = MaxWidth * displayedEmbarrassmentPortion;
-			GuiHelper.StereoDrawTexture(490, 400, (int)width, 64, ref EmbarrassmentMeterTexture, Color.white * MeterAlpha());
-			GuiHelper.StereoDrawTexture(490, 400, (int)MaxWidth, 64, ref EmbarrassmentMeterBorderTexture, Color.white * MeterAlpha());
-		}
 		
 		// Restore active render texture
 		RenderTexture.active = previousActive;

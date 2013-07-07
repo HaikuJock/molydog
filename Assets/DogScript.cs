@@ -20,7 +20,7 @@ public class DogScript : MonoBehaviour {
 	const float MinAttractionDistance = 20.0f;
 	const float UseageDistance = 3.0f;
 	static float AttractionSpeedFactor = 0.5f;
-	static float MaxEmbarrassment = 30.0f;
+	public static float MaxEmbarrassment = 30.0f;
 	public bool embarrass=false;
 	
 	// Use this for initialization
